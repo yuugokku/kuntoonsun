@@ -1,4 +1,4 @@
-# toonsun.lua
+# KunToonsun
 
 ユーゴック語の単語を韻律解析するLuaスクリプト。
 
