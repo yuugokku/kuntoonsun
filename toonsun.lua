@@ -1,3 +1,4 @@
+
 -- toonsun.lua written by @yuugokku (KPHT)
 
 -- 短母音
@@ -179,21 +180,21 @@ function _into_syllables(text)
         local syllable = string.sub(text, s, e - 1):gsub('^%s+', ''):gsub('%s+$', '')
         syllables[#syllables + 1] = syllable
     end
-    for i, v in ipairs(syllables) do
-    end
     local syllables_ = {}
     for index, s in ipairs(syllables) do
         if count_vowels(s) >= 3 then
             local head_c, v, c = decompose(s)
-            start = string.len(head_c) + 1
-            i = start
-            m = {}
+            local start = string.len(head_c) + 1
+            local i = start
+            local kokia = -1
+            local istugoa = -1
             while string.len(s) > i do
                 if includes(kokia_mangaton, string.sub(s, i, i + 1)) then
-                    m.kokia = i
+                    kokia = i
+                    break
                 end
                 if includes(istugoa_mangaton, string.sub(s, i, i + 1)) then
-                    m.istugoa = i
+                    istugoa = i
                 end
                 if includes(mangaton, string.sub(s, i, i)) and
                     includes(kastanton, string.sub(s, i + 1, i + 1)) then
@@ -201,14 +202,16 @@ function _into_syllables(text)
                 end
                 i = i + 1
             end
-            if m.kokia ~= nil then
-                i = m.kokia
+            if kokia ~= -1 then
+                i = kokia
+            elseif istugoa ~= -1 then
+                i = istugoa
             else
-                i = m.istugoa
+                i = start + 2
             end
             if count_vowels(s) == 3 then
                 if start == i then
-                    parts = {string.sub(s, start, i + 1), string.sub(s, i + 2, -1)}
+                    parts = {string.sub(s, start, start + 1), string.sub(s, start + 2, -1)}
                 else
                     parts = {string.sub(s, start, i - 1), string.sub(s, i, -1)}
                 end
